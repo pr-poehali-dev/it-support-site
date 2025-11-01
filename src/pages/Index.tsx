@@ -13,6 +13,14 @@ import Icon from "@/components/ui/icon";
 
 const Index = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const services = [
     {
@@ -356,30 +364,82 @@ const Index = () => {
                 <CardTitle>Отправить сообщение</CardTitle>
               </CardHeader>
               <CardContent>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={async (e) => {
+                  e.preventDefault();
+                  setIsSubmitting(true);
+                  setSubmitMessage('');
+                  
+                  try {
+                    const response = await fetch('https://functions.poehali.dev/89f15840-23b4-494a-9914-0d335e5988ba', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(formData)
+                    });
+                    
+                    if (response.ok) {
+                      setSubmitMessage('Сообщение успешно отправлено!');
+                      setFormData({ name: '', email: '', phone: '', message: '' });
+                    } else {
+                      setSubmitMessage('Ошибка при отправке. Попробуйте позже.');
+                    }
+                  } catch (error) {
+                    setSubmitMessage('Ошибка при отправке. Попробуйте позже.');
+                  } finally {
+                    setIsSubmitting(false);
+                  }
+                }}>
                   <div>
-                    <Input placeholder="Ваше имя" className="bg-background" />
+                    <Input 
+                      placeholder="Ваше имя" 
+                      className="bg-background"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      required
+                    />
                   </div>
                   <div>
                     <Input
                       type="email"
                       placeholder="Email"
                       className="bg-background"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      required
                     />
                   </div>
                   <div>
-                    <Input placeholder="Телефон" className="bg-background" />
+                    <Input 
+                      placeholder="Телефон" 
+                      className="bg-background"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      required
+                    />
                   </div>
                   <div>
                     <Textarea
                       placeholder="Ваше сообщение"
                       rows={4}
                       className="bg-background"
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
+                      required
                     />
                   </div>
-                  <Button className="w-full bg-primary hover:bg-primary/90">
+                  {submitMessage && (
+                    <div className={`text-sm ${submitMessage.includes('успешно') ? 'text-green-500' : 'text-red-500'}`}>
+                      {submitMessage}
+                    </div>
+                  )}
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-primary hover:bg-primary/90"
+                    disabled={isSubmitting}
+                  >
                     <Icon name="Send" size={18} className="mr-2" />
-                    Отправить
+                    {isSubmitting ? 'Отправка...' : 'Отправить'}
                   </Button>
                 </form>
               </CardContent>
