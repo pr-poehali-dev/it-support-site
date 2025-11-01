@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
 interface Message {
@@ -14,9 +16,19 @@ interface Message {
 const Admin = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchMessages();
+    const auth = sessionStorage.getItem('adminAuth');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+      fetchMessages();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   const fetchMessages = async () => {
@@ -31,6 +43,25 @@ const Admin = () => {
     }
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (login === 'admin' && password === 'b1413331051') {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('adminAuth', 'true');
+      setError('');
+      fetchMessages();
+    } else {
+      setError('Неверный логин или пароль');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem('adminAuth');
+    setLogin('');
+    setPassword('');
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString('ru-RU', {
@@ -42,12 +73,61 @@ const Admin = () => {
     });
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <Card className="w-full max-w-md border-border bg-card">
+          <CardHeader>
+            <CardTitle className="text-2xl text-center">Вход в админ-панель</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Логин"
+                  value={login}
+                  onChange={(e) => setLogin(e.target.value)}
+                  className="bg-background"
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  type="password"
+                  placeholder="Пароль"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="bg-background"
+                  required
+                />
+              </div>
+              {error && (
+                <p className="text-sm text-red-500">{error}</p>
+              )}
+              <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+                <Icon name="LogIn" size={18} className="mr-2" />
+                Войти
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background py-12 px-4">
       <div className="container mx-auto max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Админ-панель</h1>
-          <p className="text-muted-foreground">Сообщения из формы обратной связи</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Админ-панель</h1>
+            <p className="text-muted-foreground">Сообщения из формы обратной связи</p>
+          </div>
+          <Button onClick={handleLogout} variant="outline" className="border-border">
+            <Icon name="LogOut" size={18} className="mr-2" />
+            Выйти
+          </Button>
         </div>
 
         {isLoading ? (

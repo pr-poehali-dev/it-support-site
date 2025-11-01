@@ -131,10 +131,20 @@ const Index = () => {
               Контакты
             </a>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
-            <Icon name="Phone" size={18} className="mr-2" />
-            Связаться
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => window.location.href = '/admin'} 
+              variant="outline" 
+              size="icon"
+              className="border-border"
+            >
+              <Icon name="Shield" size={18} />
+            </Button>
+            <Button className="bg-primary hover:bg-primary/90">
+              <Icon name="Phone" size={18} className="mr-2" />
+              Связаться
+            </Button>
+          </div>
         </div>
       </nav>
 
