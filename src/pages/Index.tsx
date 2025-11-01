@@ -10,11 +10,19 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Icon from "@/components/ui/icon";
 
 const Index = () => {
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -142,7 +150,7 @@ const Index = () => {
             >
               <Icon name="Shield" size={18} />
             </Button>
-            <Button className="bg-primary hover:bg-primary/90">
+            <Button onClick={() => setIsContactDialogOpen(true)} className="bg-primary hover:bg-primary/90">
               <Icon name="Phone" size={18} className="mr-2" />
               Связаться
             </Button>
@@ -540,6 +548,134 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <Dialog open={isContactDialogOpen} onOpenChange={setIsContactDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Свяжитесь с нами</DialogTitle>
+            <DialogDescription>
+              Оставьте заявку, и мы свяжемся с вами в ближайшее время
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-6 py-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card className="border-border bg-card/50">
+                <CardContent className="pt-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Icon name="Phone" className="text-primary" size={20} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm mb-1">Телефон</h3>
+                      <p className="text-sm text-muted-foreground">
+                        +7 (996) 362-43-75
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        +7 (996) 365-73-13
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border bg-card/50">
+                <CardContent className="pt-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Icon name="Mail" className="text-primary" size={20} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm mb-1">Email</h3>
+                      <p className="text-sm text-muted-foreground">
+                        info@out-sorting.ru
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        support@out-sorting.ru
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="border-border bg-card/50">
+              <CardContent className="pt-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Icon name="MapPin" className="text-primary" size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm mb-1">Адрес</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Москва, ул. Каргопольская, д. 14к2
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="border-t border-border pt-4">
+              <h3 className="font-semibold mb-4">Форма обратной связи</h3>
+              <form className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Input
+                      placeholder="Ваше имя"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Input
+                    type="tel"
+                    placeholder="Телефон"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Textarea
+                    placeholder="Ваше сообщение"
+                    value={formData.message}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
+                    rows={4}
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Отправка..." : "Отправить заявку"}
+                </Button>
+                {submitMessage && (
+                  <p className="text-sm text-center text-muted-foreground">
+                    {submitMessage}
+                  </p>
+                )}
+              </form>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <footer className="bg-card border-t border-border py-12 px-4">
         <div className="container mx-auto">
