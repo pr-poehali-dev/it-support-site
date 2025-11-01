@@ -1,3 +1,4 @@
 {
+  "get-messages": "https://functions.poehali.dev/3c579f7e-e046-43fe-93aa-85e8c4d5277f",
   "save-message": "https://functions.poehali.dev/89f15840-23b4-494a-9914-0d335e5988ba"
 }
