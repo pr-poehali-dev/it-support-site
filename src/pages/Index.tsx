@@ -617,7 +617,44 @@ const Index = () => {
 
             <div className="border-t border-border pt-4">
               <h3 className="font-semibold mb-4">Форма обратной связи</h3>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                setSubmitMessage("");
+
+                try {
+                  const response = await fetch(
+                    "https://functions.poehali.dev/89f15840-23b4-494a-9914-0d335e5988ba",
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(formData),
+                    }
+                  );
+
+                  if (response.ok) {
+                    setSubmitMessage("Сообщение успешно отправлено!");
+                    setFormData({
+                      name: "",
+                      email: "",
+                      phone: "",
+                      message: "",
+                    });
+                    setTimeout(() => {
+                      setIsContactDialogOpen(false);
+                      setSubmitMessage("");
+                    }, 2000);
+                  } else {
+                    setSubmitMessage("Ошибка при отправке. Попробуйте позже.");
+                  }
+                } catch (error) {
+                  setSubmitMessage("Ошибка при отправке. Попробуйте позже.");
+                } finally {
+                  setIsSubmitting(false);
+                }
+              }}>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Input
@@ -626,6 +663,7 @@ const Index = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                       }
+                      required
                     />
                   </div>
                   <div>
@@ -636,6 +674,7 @@ const Index = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
+                      required
                     />
                   </div>
                 </div>
@@ -647,6 +686,7 @@ const Index = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
+                    required
                   />
                 </div>
                 <div>
@@ -657,8 +697,14 @@ const Index = () => {
                       setFormData({ ...formData, message: e.target.value })
                     }
                     rows={4}
+                    required
                   />
                 </div>
+                {submitMessage && (
+                  <div className={`text-sm ${submitMessage.includes("успешно") ? "text-green-500" : "text-red-500"}`}>
+                    {submitMessage}
+                  </div>
+                )}
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90"
@@ -666,11 +712,6 @@ const Index = () => {
                 >
                   {isSubmitting ? "Отправка..." : "Отправить заявку"}
                 </Button>
-                {submitMessage && (
-                  <p className="text-sm text-center text-muted-foreground">
-                    {submitMessage}
-                  </p>
-                )}
               </form>
             </div>
           </div>
