@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -133,7 +135,7 @@ const Index = () => {
           </div>
           <div className="flex gap-2">
             <Button 
-              onClick={() => window.location.href = '/admin'} 
+              onClick={() => navigate('/admin')} 
               variant="outline" 
               size="icon"
               className="border-border"
