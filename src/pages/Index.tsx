@@ -411,10 +411,10 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold mb-1">Телефон</h3>
                       <p className="text-muted-foreground">
-                        +7 (495) 123-12-12
+                        +7 (362) 362-43-75
                       </p>
                       <p className="text-muted-foreground">
-                        +7 (800) 555-55-55
+                        +7 (996) 365-73-13
                       </p>
                     </div>
                   </div>
@@ -430,10 +430,10 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold mb-1">Email</h3>
                       <p className="text-muted-foreground">
-                        info@techsupport.pro
+                        info@out-sorting.ru
                       </p>
                       <p className="text-muted-foreground">
-                        support@techsupport.pro
+                        support@out-sorting.ru
                       </p>
                     </div>
                   </div>
