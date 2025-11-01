@@ -1,11 +1,11 @@
 import json
-from datetime import datetime
+import os
 from typing import Dict, Any
-from pathlib import Path
+import psycopg2
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Save contact form messages to admin.txt file
+    Business: Save contact form messages to database
     Args: event - dict with httpMethod, body containing name, email, phone, message
           context - object with request_id, function_name attributes
     Returns: HTTP response dict with success/error status
@@ -41,23 +41,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     phone = body_data.get('phone', '')
     message = body_data.get('message', '')
     
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    database_url = os.environ.get('DATABASE_URL')
     
-    entry = f"""
-=====================================
-Дата: {timestamp}
-Имя: {name}
-Email: {email}
-Телефон: {phone}
-Сообщение: {message}
-=====================================
-
-"""
+    conn = psycopg2.connect(database_url)
+    cur = conn.cursor()
     
-    file_path = Path('/tmp/admin.txt')
+    cur.execute(
+        "INSERT INTO contact_messages (name, email, phone, message) VALUES (%s, %s, %s, %s)",
+        (name, email, phone, message)
+    )
     
-    with open(file_path, 'a', encoding='utf-8') as f:
-        f.write(entry)
+    conn.commit()
+    cur.close()
+    conn.close()
     
     return {
         'statusCode': 200,
