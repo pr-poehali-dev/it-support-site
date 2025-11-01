@@ -73,6 +73,25 @@ const Admin = () => {
     });
   };
 
+  const handleDelete = async (id: number) => {
+    if (!confirm('Удалить это сообщение?')) return;
+    
+    try {
+      const response = await fetch(
+        `https://functions.poehali.dev/a6b29ddf-fa2b-4618-bf89-d73d5bfdd3ac?id=${id}`,
+        { method: 'DELETE' }
+      );
+      
+      if (response.ok) {
+        setMessages(messages.filter(msg => msg.id !== id));
+      } else {
+        alert('Ошибка при удалении');
+      }
+    } catch (error) {
+      alert('Ошибка при удалении');
+    }
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -153,7 +172,17 @@ const Admin = () => {
                         {formatDate(msg.created_at)}
                       </p>
                     </div>
-                    <span className="text-sm text-muted-foreground">#{msg.id}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">#{msg.id}</span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(msg.id)}
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                      >
+                        <Icon name="Trash2" size={18} />
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
