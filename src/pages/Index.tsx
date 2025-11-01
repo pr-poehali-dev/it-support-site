@@ -159,32 +159,7 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="mt-16 mb-12 max-w-5xl mx-auto">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-primary/20 border-2 border-primary/30">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-primary/20"></div>
-              <img
-                src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&h=600&fit=crop"
-                alt="IT Server Infrastructure"
-                className="w-full h-[400px] object-cover mix-blend-overlay opacity-90"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-8">
-                <div className="flex items-center gap-3 text-white">
-                  <Icon name="Server" size={32} className="text-primary" />
-                  <div>
-                    <h3 className="text-2xl font-bold">
-                      Надёжная инфраструктура
-                    </h3>
-                    <p className="text-gray-200">
-                      Современные серверы и круглосуточный мониторинг
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-0 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="animate-scale-in">
               <div className="text-4xl font-bold text-primary mb-2">500+</div>
               <div className="text-muted-foreground">Клиентов</div>
